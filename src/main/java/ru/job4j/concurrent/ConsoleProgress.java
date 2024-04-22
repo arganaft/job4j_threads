@@ -16,7 +16,7 @@ public class ConsoleProgress implements Runnable {
         }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("\nLoading complete");
+            System.out.println("\nLoading interrupted");
         }
     }
 
