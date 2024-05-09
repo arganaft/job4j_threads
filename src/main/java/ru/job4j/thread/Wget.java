@@ -35,9 +35,11 @@ public class Wget implements Runnable {
                 if (dowloadByte >= speed) {
                     long dowloadTimeMillis = System.currentTimeMillis() - downloadAt;
                     System.out.printf("Dowload %d Byte in: %d Millis%n", dowloadByte, dowloadTimeMillis);
-                    long sleepTime = (1000 - dowloadTimeMillis) * (dowloadByte / speed);
-                    System.out.printf("Thread.sleep(%d)%n", sleepTime);
-                    Thread.sleep(sleepTime);
+                    if (dowloadTimeMillis < 1000) {
+                        long sleepTime = 1000 - dowloadTimeMillis;
+                        System.out.printf("Thread.sleep(%d)%n", sleepTime);
+                        Thread.sleep(sleepTime);
+                    }
                     dowloadByte = 0;
                     downloadAt = System.currentTimeMillis();
                 }
