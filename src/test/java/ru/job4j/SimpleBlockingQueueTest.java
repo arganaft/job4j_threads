@@ -9,16 +9,14 @@ class SimpleBlockingQueueTest {
 
     @Test
     void whenSizeIs0() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> {
-            new SimpleBlockingQueue<Integer>(0);})
+        assertThat(assertThrows(IllegalArgumentException.class, () -> new SimpleBlockingQueue<Integer>(0))
                 .getMessage())
                 .isEqualTo("Размер очереди не может быть 0 или отрицательным, размер очереди установлен по умолчанию на - 1");
 
     }
     @Test
     void whenSizeIsNegative() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> {
-            new SimpleBlockingQueue<Integer>(-15);})
+        assertThat(assertThrows(IllegalArgumentException.class, () -> new SimpleBlockingQueue<Integer>(-15))
                 .getMessage())
                 .isEqualTo("Размер очереди не может быть 0 или отрицательным, размер очереди установлен по умолчанию на - 1");
 
@@ -26,8 +24,7 @@ class SimpleBlockingQueueTest {
     @Test
     void whenOfferNull() {
         SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(4);
-        assertThat(assertThrows(NullPointerException.class, () -> {
-            sbq.offer(null);})
+        assertThat(assertThrows(NullPointerException.class, () -> sbq.offer(null))
                 .getMessage())
                 .isEqualTo("Попытка добавить NULL значение");
 
