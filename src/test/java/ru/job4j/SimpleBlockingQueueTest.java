@@ -56,6 +56,7 @@ class SimpleBlockingQueueTest {
                 sbq.poll();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         });
         consumer.start();
