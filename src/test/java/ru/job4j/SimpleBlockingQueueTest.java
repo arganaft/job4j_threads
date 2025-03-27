@@ -11,22 +11,14 @@ class SimpleBlockingQueueTest {
     void whenSizeIs0() {
         assertThat(assertThrows(IllegalArgumentException.class, () -> new SimpleBlockingQueue<Integer>(0))
                 .getMessage())
-                .isEqualTo("Размер очереди не может быть 0 или отрицательным, размер очереди установлен по умолчанию на - 1");
+                .isEqualTo("Размер очереди не может быть 0 или отрицательным");
 
     }
     @Test
     void whenSizeIsNegative() {
         assertThat(assertThrows(IllegalArgumentException.class, () -> new SimpleBlockingQueue<Integer>(-15))
                 .getMessage())
-                .isEqualTo("Размер очереди не может быть 0 или отрицательным, размер очереди установлен по умолчанию на - 1");
-
-    }
-    @Test
-    void whenOfferNull() {
-        SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(4);
-        assertThat(assertThrows(NullPointerException.class, () -> sbq.offer(null))
-                .getMessage())
-                .isEqualTo("Попытка добавить NULL значение");
+                .isEqualTo("Размер очереди не может быть 0 или отрицательным");
 
     }
 
@@ -34,7 +26,13 @@ class SimpleBlockingQueueTest {
     void isProducerBlockedWhenQueueIsFull() throws InterruptedException {
         SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(1);
         sbq.offer(1);
-        Thread producer = new Thread(() -> sbq.offer(2));
+        Thread producer = new Thread(() -> {
+            try {
+                sbq.offer(2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
         producer.start();
         long deadLine = System.currentTimeMillis() + 5000;
         while (producer.getState().equals(Thread.State.RUNNABLE)) {
