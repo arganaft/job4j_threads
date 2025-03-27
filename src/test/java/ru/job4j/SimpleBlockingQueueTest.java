@@ -34,7 +34,13 @@ class SimpleBlockingQueueTest {
     void isProducerBlockedWhenQueueIsFull() throws InterruptedException {
         SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>(1);
         sbq.offer(1);
-        Thread producer = new Thread(() -> sbq.offer(2));
+        Thread producer = new Thread(() -> {
+            try {
+                sbq.offer(2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
         producer.start();
         long deadLine = System.currentTimeMillis() + 5000;
         while (producer.getState().equals(Thread.State.RUNNABLE)) {

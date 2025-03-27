@@ -15,27 +15,19 @@ public class SimpleBlockingQueue<T> {
 
     public SimpleBlockingQueue(int size) {
         if (size <= 0) {
-            this.size = 1;
-            throw new IllegalArgumentException("Размер очереди не может быть 0 или отрицательным, размер очереди установлен по умолчанию на - 1");
-        } else {
-            this.size = size;
+            throw new IllegalArgumentException("Размер очереди не может быть 0 или отрицательным");
         }
+        this.size = size;
     }
 
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
-            if (value == null) {
-                throw new NullPointerException("Попытка добавить NULL значение");
+            while (queue.size() >= size) {
+                this.wait();
             }
-            try {
-                while (queue.size() >= size) {
-                    this.wait();
-                }
-                queue.offer(value);
-                this.notify();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            queue.offer(value);
+            this.notify();
+
         }
     }
 
@@ -44,8 +36,9 @@ public class SimpleBlockingQueue<T> {
             while (queue.isEmpty()) {
                 this.wait();
             }
+            T result = queue.poll();
             this.notify();
-            return queue.poll();
+            return result;
         }
     }
 }
