@@ -9,11 +9,10 @@ public class ParallelSearch {
         int count = 3;
         final Thread consumer = new Thread(
                 () -> {
-                    for (int index = 0; index != count; index++) {
+                    while (!Thread.currentThread().isInterrupted()) {
                         try {
                             System.out.println(queue.poll());
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
                             Thread.currentThread().interrupt();
                         }
                     }
@@ -30,6 +29,7 @@ public class ParallelSearch {
                             e.printStackTrace();
                         }
                     }
+                    consumer.interrupt();
                 }
 
         ).start();
