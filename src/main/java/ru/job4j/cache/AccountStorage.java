@@ -1,4 +1,4 @@
-package ru.job4j.cash;
+package ru.job4j.cache;
 
 import java.util.HashMap;
 import java.util.Optional;
